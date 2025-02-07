@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import PhotosManager from "../controller/photos.manager";
+import PhotosManager from "../controller/photos.manager.js";
 
 const photoRouter = Router();
 const pm = new PhotosManager()
