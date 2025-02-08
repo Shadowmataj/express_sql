@@ -14,3 +14,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/photos", photoRouter);
+
+// Access to static content
+app.use('/static', express.static(`${config.DIRNAME}/public`));

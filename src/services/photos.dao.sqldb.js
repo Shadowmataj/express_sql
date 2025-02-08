@@ -34,11 +34,11 @@ class PhotosServices{
         )
         
         const pid = result.insertId
-        return this.getPhoto(pid)
+        return this.getPhotoService(pid)
     }
 
     async deletePhotosService(pid){
-        const [photo] = this.getPhoto(pid)
+        const photo = this.getPhotoService(pid)
         await this.pool.query(`
             DELETE FROM photos
             WHERE id = ?`, [pid])
