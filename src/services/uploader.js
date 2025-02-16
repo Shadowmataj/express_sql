@@ -31,5 +31,10 @@ export const cloudinaryUpload = async file => {
     return result
 }
 
+export const cloudinaryDestroy = async fileName => {
+    const result = await cloudinary.uploader.destroy(fileName)
+    return result
+}
+
 const storage = multer.memoryStorage();
 export const uploader = multer({ storage: config.STORAGE === "cloud" ? storage : localStorage });

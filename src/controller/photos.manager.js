@@ -22,9 +22,9 @@ class PhotosManager{
         }
     }
 
-    async createPhoto(title, thumbnails, alt){
+    async createPhoto(title, thumbnail, alt, cloudinaryPublicId){
         try{
-            const result = ps.createPhotoService(title, thumbnails, alt)
+            const result = ps.createPhotoService(title, thumbnail, alt, cloudinaryPublicId)
             return result
         }catch(err){
             console.log(`Function getPhotos: ${err}`)

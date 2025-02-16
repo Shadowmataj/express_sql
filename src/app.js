@@ -2,6 +2,7 @@ import express from "express";
 
 import config from "./config.js";
 import photoRouter from "./routes/photo.routes.js";
+import addLogger from "./services/logger.js";
 
 const app = express();
 const port = 8000;
@@ -12,6 +13,9 @@ app.listen(config.PORT, (async) => {
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+//Adding logger.
+app.use(addLogger)
 
 app.use("/api/photos", photoRouter);
 
