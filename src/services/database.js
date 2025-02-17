@@ -1,14 +1,10 @@
-import mysql from 'mysql2'
-
-import config from '../config.js'
-
-let pool = mysql.createPool({
+import mysql from 'mysql2';
+import config from '../config.js';
+const access = {
     host: config.HOST,
     user: config.MYSQL_USER,
+    password: config.MYSQL_PASSWORD,
     database: config.MYSQL_DATABASE
-}, err => {
-    if(err) console.log(err)
-    console.log("Connected to the database")
-}).promise()
-
-export default pool
+};
+const pool = mysql.createPool(access).promise();
+export default pool;
