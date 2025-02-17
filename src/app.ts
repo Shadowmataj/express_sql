@@ -1,10 +1,10 @@
 import express from "express";
 
-import config from "./config.js";
-import photoRouter from "./routes/photo.routes.js";
-import usersRouter from "./routes/users.routes.js";
-import authRouter from "./routes/auth.routes.js";
-import addLogger from "./services/logger.js";
+import config from "./config.ts";
+import photoRouter from "./routes/photo.routes.ts";
+import usersRouter from "./routes/users.routes.ts";
+import authRouter from "./routes/auth.routes.ts";
+import addLogger from "./services/logger.ts";
 
 const app = express();
 const port = 8000;

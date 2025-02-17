@@ -2,15 +2,14 @@ import multer from 'multer';
 import path from 'path';
 import {v2 as cloudinary} from 'cloudinary'
 
-import config from '../config.js';
-import { dataUri } from './utils.js';
+import config from '../config.ts';
+import { dataUri } from './utils.ts';
 
 
 cloudinary.config({
     cloud_name: config.CLOUDINARY_NAME,
     api_key: config.CLOUDINARY_API_KEY,
     api_secret: config.CLOUDINARY_API_SECRET,
-    secure: true
 })
 
 

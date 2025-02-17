@@ -1,5 +1,5 @@
 import * as chai from "chai";
-import UsersServices from "../src/services/users.dao.sqldb.js";
+import UsersServices from "../src/services/users.dao.sqldb.ts";
 
 const usersDao = new UsersServices()
 const expect = chai.expect

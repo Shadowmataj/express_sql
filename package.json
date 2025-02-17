@@ -6,7 +6,7 @@
   "scripts": {
     "tsc": "tsc",
     "dev": "nodemon --env-file=.env.devel build/src/app",
-    "dev:ts": "nodemon --env-file=.env.devel --exec ts-node-dev src/app.ts",
+    "dev:ts": "npx tsx --env-file=.env.devel --watch  src/app.ts",
     "test": "concurrently \"npm run test:photos\" \"npm run test:users\"",
     "test:photos": "mocha build/test/photos.dao.test.ts",
     "test:users": "mocha build/test/users.dao.test.",
@@ -54,6 +54,7 @@
     "mocha": "^11.1.0",
     "supertest": "^7.0.0",
     "ts-node-dev": "^2.0.0",
+    "tsx": "^3.12.10",
     "typescript": "^5.7.3"
   }
 }

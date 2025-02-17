@@ -1,8 +1,8 @@
-import mysql, {PoolOptions} from 'mysql2'
+import mysql from 'mysql2'
 
-import config from '../config.js'
+import config from '../config.ts'
 
-const access: PoolOptions = {
+const access: any = {
     host: config.HOST,
     user: config.MYSQL_USER,
     password: config.MYSQL_PASSWORD,

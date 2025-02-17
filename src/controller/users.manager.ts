@@ -1,4 +1,4 @@
-import UsersServices from '../services/users.dao.sqldb.js'
+import UsersServices from '../services/users.dao.sqldb.ts'
 
 const us = new UsersServices()
 

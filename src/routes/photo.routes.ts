@@ -1,11 +1,10 @@
-import { Router } from "express";
+import { Request, Response, Router } from "express";
 import moment from "moment";
 
+import multer from "multer";
 import config from "../config.js";
 import PhotosManager from "../controller/photos.manager.js";
-import { v2 as cloudinary } from "cloudinary";
-import multer from "multer";
-import { Request, Response } from "express";
+import { cloudinaryDestroy, cloudinaryUpload } from "../services/uploader.ts";
 
 const photoRouter = Router();
 const pm = new PhotosManager();
@@ -49,41 +48,25 @@ photoRouter.post(
   uploader.single("file"),
   async (req: Request, res: Response) => {
     const { title, alt } = req.body;
+    let response: any = undefined;
+    let uploadedInfo: any = undefined
+    let cloudinaryPublicId: any = undefined
     try {
-      if (!req.file) throw new Error("No photo was upload.");
-      if (config.STORAGE === "cloud") {
-        cloudinary.uploader.upload_stream(
-          { resource_type: "image" },
-          async (error, result) => {
-            if (error || !result) {
-              return res
-                .status(500)
-                .send("Failed to upload image or extract text.");
-            }
 
-            const thumbnail = result.secure_url;
-            const cloudinaryPublicId = result.public_id;
-            const [[dbResult]] = await pm.createPhoto(
-              title,
-              thumbnail,
-              alt,
-              cloudinaryPublicId
-            );
+        if (!req.file) throw new Error("No photo was upload.");
+        if (config.STORAGE === "cloud") {
+            uploadedInfo = await cloudinaryUpload(req.file);
+            cloudinaryPublicId = uploadedInfo.public_id;
+            response = uploadedInfo.secure_url;
+        }
+        const thumbnail = !response ? req.file.path : response;
+        const [[result]] = await pm.createPhoto(title, thumbnail, alt, cloudinaryPublicId);
 
-            req.logger.info(
-              `${moment().format()} ${req.method} api/photos${req.url}`
-            );
-            return res
-              .status(200)
-              .send({ status: "success", payload: dbResult });
-          }
-        );
-      }
+        req.logger.info(`${moment().format()} ${req.method} api/photos${req.url}`)
+        res.status(200).send({ status: "success", payload: result });
     } catch (err: any) {
-      req.logger.error(
-        `${moment().format()} ${req.method} api/photos${req.url} ${err}`
-      );
-      res.status(400).send({ status: "error", payload: err.message });
+        req.logger.error(`${moment().format()} ${req.method} api/photos${req.url} ${err}`)
+        res.status(400).send({ status: "error", payload: err.message });
     }
   }
 );
@@ -97,26 +80,21 @@ photoRouter.put("/", async (req: Request, res: Response) => {
 //Endpoint to delete a single photo.
 photoRouter.delete("/:pid", async (req: Request, res: Response) => {
   const pid = +req.params.pid;
-  try {
-    const result: any = await pm.deletePhotos(pid);
-    await cloudinary.uploader.destroy(result, (result: any) =>
-      console.log(result)
-    );
-
-    if (result === undefined)
-      throw new Error("The oparation can not be done, the id is incorrect.");
-
-    req.logger.info(`${moment().format()} ${req.method} api/photos${req.url}`);
-    res.status(200).send({
-      status: "success",
-      payload: `The photo "${result.italics()}" has been deleted.`,
-    });
-  } catch (err: any) {
-    req.logger.error(
-      `${moment().format()} ${req.method} api/photos${req.url} ${err}`
-    );
-    res.status(400).send({ status: "error", payload: err.message });
-  }
+    try {
+        const result: any = await pm.deletePhotos(pid);
+        await cloudinaryDestroy(result);
+        if (result === undefined)
+            throw new Error("The oparation can not be done, the id is incorrect.");
+        req.logger.info(`${moment().format()} ${req.method} api/photos${req.url}`);
+        res.status(200).send({
+            status: "success",
+            payload: `The photo "${result.italics()}" has been deleted.`,
+        });
+    }
+    catch (err:any) {
+        req.logger.error(`${moment().format()} ${req.method} api/photos${req.url} ${err}`);
+        res.status(400).send({ status: "error", payload: err.message });
+    }
 });
 
 export default photoRouter;

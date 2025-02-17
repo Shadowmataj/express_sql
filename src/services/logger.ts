@@ -1,6 +1,6 @@
 import * as winston  from 'winston';
 
-import config from '../config.js';
+import config from '../config.ts';
 import { Request, Response, NextFunction } from 'express';
 
 const customLevels = {

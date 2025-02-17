@@ -1,8 +1,8 @@
 import passport from "passport"
 import local from "passport-local"
 
-import usersManager from "../controller/users.manager.js"
-import { isValidPassword } from "../services/utils.js"
+import usersManager from "../controller/users.manager.ts"
+import { isValidPassword } from "../services/utils.ts"
 
 const localStrategy = local.Strategy
 const um = new usersManager()

@@ -1,5 +1,5 @@
 import * as chai from "chai";
-import PhotosServices from "../src/services/photos.dao.sqldb.js";
+import PhotosServices from "../src/services/photos.dao.sqldb.ts";
 
 const dao = new PhotosServices()
 const expect = chai.expect

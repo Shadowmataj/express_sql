@@ -3,7 +3,7 @@ import path from "path"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 
-import config from '../config.js';
+import config from '../config.ts';
 import { NextFunction, Request, Response } from 'express';
 
 interface User  {firstName: string, email: string}

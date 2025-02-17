@@ -1,9 +1,9 @@
 import { Router } from "express";
 import passport from "passport";
 
-import usersManager from "../controller/users.manager.js";
-import { createHash, createToken } from "../services/utils.js";
-import initAuthStrategies from "../auth/passport.strategies.js";
+import usersManager from "../controller/users.manager.ts";
+import { createHash, createToken } from "../services/utils.ts";
+import initAuthStrategies from "../auth/passport.strategies.ts";
 import moment from "moment";
 
 const authRouter = Router();

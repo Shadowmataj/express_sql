@@ -1,7 +1,7 @@
 import { Router } from "express";
 import moment from "moment";
 
-import usersManager from "../controller/users.manager.js";
+import usersManager from "../controller/users.manager.ts";
 
 const usersRouter = Router();
 const um = new usersManager();

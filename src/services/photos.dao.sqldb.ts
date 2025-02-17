@@ -1,4 +1,4 @@
-import pool from './database.js'
+import pool from './database.ts'
 
 
 class PhotosServices{
@@ -26,7 +26,7 @@ class PhotosServices{
     }
 
     async deletePhotosService(pid: number): Promise<string|undefined>{
-        const [[photo]]: any[] = await this.getPhotoService(pid)
+        const [photo]: any[] = await this.getPhotoService(pid)
         await pool.query(`
             CALL p_delete_photo(?)`, [pid])
         return photo.cloudinaryPublicId

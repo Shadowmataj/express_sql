@@ -1,4 +1,4 @@
-import PhotosServices  from "../services/photos.dao.sqldb.js"
+import PhotosServices  from "../services/photos.dao.sqldb.ts"
 
 const ps = new PhotosServices()
 
