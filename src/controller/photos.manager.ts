@@ -13,30 +13,30 @@ class PhotosManager{
         }
     }
 
-    async getPhoto(pid){
+    async getPhoto(pid: number){
         try{
             const result = ps.getPhotoService(pid)
             return result
         }catch(err){
-            console.log(`Function getPhotos: ${err}`)
+            console.log(`Function getPhoto: ${err}`)
         }
     }
 
-    async createPhoto(title, thumbnail, alt, cloudinaryPublicId){
+    async createPhoto(title: string, thumbnail: string, alt: string, cloudinaryPublicId: string){
         try{
             const result = ps.createPhotoService(title, thumbnail, alt, cloudinaryPublicId)
             return result
         }catch(err){
-            console.log(`Function getPhotos: ${err}`)
+            console.log(`Function createPhoto: ${err}`)
         }
     }
 
-    async deletePhotos(pid){
+    async deletePhotos(pid: number){
         try{
             const result = ps.deletePhotosService(pid)
             return result
         }catch(err){
-            console.log(`Function getPhotos: ${err}`)
+            console.log(`Function deletePhotos: ${err}`)
         }
     }
 

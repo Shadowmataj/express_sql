@@ -9,29 +9,30 @@ import { dataUri } from './utils.js';
 cloudinary.config({
     cloud_name: config.CLOUDINARY_NAME,
     api_key: config.CLOUDINARY_API_KEY,
-    api_secret: config.CLOUDINARY_API_SECRET
+    api_secret: config.CLOUDINARY_API_SECRET,
+    secure: true
 })
 
 
 const localStorage = multer.diskStorage({
-    destination: (req, file, cb) => {
+    destination: (req, _file, cb) => {
         const subFolder = path.basename(req.path);
         cb(null, `${config.UPLOAD_DOCUMENTS_DIR}/${subFolder}`);
     },  
     
-    filename: (req, file, cb) => {
+    filename: (_req, file, cb) => {
         const date = Date.now()
         cb(null, date+file.originalname.split(".")[0].toUpperCase()+"."+file.originalname.split(".")[1] );
     }
 });
 
-export const cloudinaryUpload = async file => {
-    const formatedFile = dataUri(file).content;
+export const cloudinaryUpload = async (file: {originalname: string, buffer: Buffer}) => {
+    const formatedFile: any = dataUri(file.originalname, file.buffer).content;
     const result = await cloudinary.uploader.upload(formatedFile)
     return result
 }
 
-export const cloudinaryDestroy = async fileName => {
+export const cloudinaryDestroy = async (fileName: string) => {
     const result = await cloudinary.uploader.destroy(fileName)
     return result
 }
