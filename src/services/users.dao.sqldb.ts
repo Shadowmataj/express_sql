@@ -1,5 +1,5 @@
 import pool from "./database.ts"
-
+import { User } from "../types.ts"
 
 
 class UsersServices{
@@ -7,21 +7,27 @@ class UsersServices{
     constructor(){
     }
 
-    async getUsersService(): Promise<any>{
-        const [result]: any[]= await pool.query("SELECT * FROM users")
+    async getUsersService(): Promise<Array<User>>{
+        const [result]: Array<any[]>= await pool.query("SELECT * FROM users")
         return result
     }
 
-    async getUserByIdService(pid: number): Promise<any>{
-        const [result]: any[]= await pool.query(`
+    async getUserByIdService(pid: number): Promise<User>{
+        const [[[result]]]: any[]= await pool.query(`
             CALL p_get_user(?)`, [pid])
         return result
     }
 
-    async getUserByEmailService(email: string): Promise<object>{ 
-        const [result]: any[] = await pool.query(`
-            CALL p_get_user_by_email(?)`, [email])
-        return result
+    async getUserByEmailService(email: string): Promise<any>{ 
+        try {
+            const [[[result]]]: any[] = await pool.query(`
+                CALL p_get_user_by_email(?)`, [email])
+                console.log(result)
+            return result
+
+        }  catch (error) {
+            console.log(error)
+        }
     }
 
     async createUserService(firstName: string, lastName: string, email: string, birthday: string, password: string): Promise<any>{
@@ -34,7 +40,7 @@ class UsersServices{
     }
 
     async deleteUserService(pid: number): Promise<string>{
-        const [[photo]]: any[] = await this.getUserByIdService(pid)
+        const photo: User= await this.getUserByIdService(pid)
         await pool.query(`
             CALL p_delete_user(?)`, [pid])
         return photo.firstName

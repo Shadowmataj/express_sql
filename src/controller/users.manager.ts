@@ -6,8 +6,7 @@ class usersManager{
 
     async getUsers(){
         try{
-            const result = us.getUsersService()
-            return result
+            return us.getUsersService()
         }catch(err){
             console.log(`Function getUsers: ${err}`)
         }
@@ -15,8 +14,7 @@ class usersManager{
 
     async getUserById(pid: number){
         try{
-            const result = us.getUserByIdService(pid)
-            return result
+            return us.getUserByIdService(pid)
         }catch(err){
             console.log(`Function getUser: ${err}`)
         }
@@ -24,8 +22,7 @@ class usersManager{
 
     async getUserByEmail(email: string){
         try{
-            const result = us.getUserByEmailService(email)
-            return result
+            return us.getUserByEmailService(email)
         }catch(err){
             console.log(`Function getUserByEmail: ${err}`)
         }

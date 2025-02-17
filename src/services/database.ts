@@ -6,7 +6,8 @@ const access: any = {
     host: config.HOST,
     user: config.MYSQL_USER,
     password: config.MYSQL_PASSWORD,
-    database: config.MYSQL_DATABASE
+    database: config.MYSQL_DATABASE,
+    debug: true
 }
 
 const pool = mysql.createPool(access).promise()
