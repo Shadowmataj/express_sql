@@ -15,3 +15,11 @@ export interface User {
   lastConnection: lastConnection;
   role: role;
 }
+
+export interface getUserByEmail {
+  email: string;
+}
+
+export interface UserByEmailRequest extends Express.Request {
+  body: getUserByEmail;
+}

@@ -29,7 +29,7 @@ const prodLogger = winston.createLogger({
 
 const addLogger = (req: Request, _res: Response, next: NextFunction) => {
     req.logger = config.MODE === 'dev' ? devLogger : prodLogger;
-    req.logger.info(`${new Date().toDateString()} ${req.method} ${req.url}`);
+    // req.logger.info(`${new Date().toDateString()} ${req.method} ${req.url}`);
     next();
 }
 

@@ -19,15 +19,16 @@ class UsersServices{
     }
 
     async getUserByEmailService(email: string): Promise<any>{ 
-        try {
-            const [[[result]]]: any[] = await pool.query(`
-                CALL p_get_user_by_email(?)`, [email])
-                console.log(result)
-            return result
+        // try {
+        //     const [[[result]]]: any[] = await pool.query(`
+        //         CALL p_get_user_by_email(?)`, [email])
+        //         console.log(result)
+        //     return result
 
-        }  catch (error) {
-            console.log(error)
-        }
+        // }  catch (error) {
+        //     console.log(error)
+        // }
+        console.log(email)
     }
 
     async createUserService(firstName: string, lastName: string, email: string, birthday: string, password: string): Promise<any>{
