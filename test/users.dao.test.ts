@@ -1,6 +1,8 @@
 import * as chai from "chai";
 import UsersServices from "../src/services/users.dao.sqldb.ts";
 
+
+
 const usersDao = new UsersServices()
 const expect = chai.expect
 let userId = 0
@@ -20,14 +22,14 @@ describe("Test DAO users", function () {
     afterEach(function () { })
     
     it("createUserService(), create a user in the db. ", async function () {
-        const [[result]]: any = await usersDao.createUserService(testUser.firstName, testUser.lastName, testUser.email, testUser.birthday, testUser.password)
+        const result: any = await usersDao.createUserService(testUser.firstName, testUser.lastName, testUser.email, testUser.birthday, testUser.password)
         expect(result).to.be.an("object")
         userId = result.userId
         expect(result).to.have.property("firstName").to.be.equal(testUser.firstName)    
         expect(result).to.have.property("lastName").to.be.equal(testUser.lastName)
         expect(result).to.have.property("email").to.be.equal(testUser.email)
         expect(result).to.have.property("birthdate")
-        expect(result).to.have.property("password")
+        expect(result).not.to.have.property("password")
         expect(result).to.have.property("lastConnection")
         expect(result).to.have.property("role")
     })
@@ -38,18 +40,18 @@ describe("Test DAO users", function () {
     })
 
     it("getUserByIdService(), retrive an object with the specific user. ", async function () {
-        const [[result]] = await usersDao.getUserByIdService(userId)
+        const result = await usersDao.getUserByIdService(userId)
         expect(result).to.have.property("firstName").to.be.equal(testUser.firstName)    
         expect(result).to.have.property("lastName").to.be.equal(testUser.lastName)
         expect(result).to.have.property("email").to.be.equal(testUser.email)
         expect(result).to.have.property("birthdate")
-        expect(result).to.have.property("password")
+        expect(result).not.to.have.property("password")
         expect(result).to.have.property("lastConnection")
         expect(result).to.have.property("role")
     })
 
     it("getUserByEmailService(), retrive an object with the specific user. ", async function () {
-        const [[result]]: any= await usersDao.getUserByEmailService(testUser.email)
+        const result: any= await usersDao.getUserByEmailService(testUser.email)
         expect(result).to.be.an("object")
         expect(result).to.have.property("firstName").to.be.equal(testUser.firstName)    
         expect(result).to.have.property("lastName").to.be.equal(testUser.lastName)
@@ -61,7 +63,7 @@ describe("Test DAO users", function () {
     })
 
     it("deleteUserService(pid), delete the specific photo. ", async function () {
-        const [result]: any = await usersDao.deleteUserService(userId)
+        const result: any = await usersDao.deleteUserService(userId)
         expect(result).to.be.an("string")
     })
 

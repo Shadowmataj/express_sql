@@ -52,7 +52,7 @@ describe("Test DAO photos", function () {
     })
 
     it("deletePhotoService(pid), delete the specific photo. ", async function () {
-        const [result]: any = await dao.deletePhotosService(photoId)
+        const result: any = await dao.deletePhotosService(photoId)
         expect(result).to.be.an("string")
     })
 })

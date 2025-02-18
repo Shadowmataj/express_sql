@@ -2,8 +2,8 @@ import { Request, Response, Router } from "express";
 import moment from "moment";
 
 import multer from "multer";
-import config from "../config.js";
-import PhotosManager from "../controller/photos.manager.js";
+import config from "../config.ts";
+import PhotosManager from "../controller/photos.manager.ts";
 import { cloudinaryDestroy, cloudinaryUpload } from "../services/uploader.ts";
 
 const photoRouter = Router();
