@@ -20,8 +20,9 @@ describe("Test DAO photos", function () {
     // It's run AFTER EACH TEST.
     afterEach(function () { })
     
+    
     it("createPhotoService(pid), retrive an object with the specific photo. ", async function () {
-        const [[result]] = await dao.createPhotoService(testPhoto.title, testPhoto.thumbnail, testPhoto.alt, testPhoto.cloudinaryPublicId)
+        const result = await dao.createPhotoService(testPhoto.title, testPhoto.thumbnail, testPhoto.alt, testPhoto.cloudinaryPublicId)
         expect(result).to.be.an("object")
         photoId = +result.photoId
         expect(result).to.have.property("photoId")
@@ -40,7 +41,7 @@ describe("Test DAO photos", function () {
     })
 
     it("getPhotoService(), retrive an object with the specific photo. ", async function () {
-        const [[result]] = await dao.getPhotoService(photoId)
+        const result = await dao.getPhotoService(photoId)
         expect(result).to.be.an("object")
         expect(result).to.have.property("photoId")
         expect(result).to.have.property("title")

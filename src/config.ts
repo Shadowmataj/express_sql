@@ -12,7 +12,7 @@ const config = {
     CLOUDINARY_NAME: process.env.CLOUDINARY_NAME, 
     CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
     CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
-    STORAGE: process.env.STORAGE || "disk",
+    STORAGE: process.env.STORAGE || "cloud",
     MODE: process.env.MODE || "dev",
     SECRET: process.env.SECRET || "secret",
 

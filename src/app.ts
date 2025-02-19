@@ -1,4 +1,6 @@
 import express from "express";
+import passport from "passport";
+import cookieParser from "cookie-parser"
 
 import config from "./config.ts";
 import photoRouter from "./routes/photo.routes.ts";
@@ -15,6 +17,11 @@ app.listen(config.PORT, async() => {
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser())
+
+        // Configure passport middleware, includes sessions.
+app.use(passport.initialize())
+app.use(passport.initialize())
 
 //Adding logger.
 app.use(addLogger)

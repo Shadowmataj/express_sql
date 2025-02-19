@@ -6,41 +6,41 @@ class UsersServices{
     constructor(){
     }
 
-    async getUsersService(): Promise<Array<User>>{
+    async getUsersService(): Promise<Array<Partial<User>>>{
         const [result]: Array<any[]>= await pool.query("SELECT userId, firstName, lastName, lastConnection, role, email FROM users")
         return result
     }
 
-    async getUserByIdService(pid: number): Promise<User>{
+    async getUserByIdService(pid: number): Promise<Partial<User|undefined>>{
         const [[[result]]]: any[]= await pool.query(`
             CALL p_get_user_by_id(?)`, [pid])
         return result
     }
 
-    async getUserByEmailService(email: string): Promise<any>{ 
-        try {
-            const [[[result]]]: any[] = await pool.query(`
-                CALL p_get_user_by_email(?)`, [email])
-            return result
-
-        }  catch (error) {
-            console.log(error)
-        }
+    async getUserByEmailService(email: string): Promise<User|undefined>{ 
+        const [[[result]]]: any[] = await pool.query(`
+            CALL p_get_user_by_email(?)`, [email])
+        return result
     }
 
-    async createUserService(firstName: string, lastName: string, email: string, birthday: string, password: string): Promise<User>{
+    async createUserService(firstName: string, lastName: string, email: string, birthday: string, hashedPassword: string): Promise<Partial<User>|undefined>{
+        const user = await this.getUserByEmailService(email)
+        
+        if(user) throw new Error("User already exists.")
+
         const [[[result]]]: any[] = await pool.query(`
-            CALL p_post_user(?, ?, ?, ?, ?)`, [firstName, lastName, email, birthday, password]
+            CALL p_post_user(?, ?, ?, ?, ?)`, [firstName, lastName, email, birthday, hashedPassword]
         )
+
         const pid: number = result["id"]
         return await this.getUserByIdService(pid)
     }
 
-    async deleteUserService(pid: number): Promise<string>{
-        const photo: User = await this.getUserByIdService(pid)
+    async deleteUserService(pid: number): Promise<string|undefined>{
+        const user: Partial<User|undefined> = await this.getUserByIdService(pid)
         await pool.query(`
             CALL p_delete_user(?)`, [pid])
-        return photo.firstName
+        return user?.firstName
     }
 
 }

@@ -7,6 +7,7 @@ type lastConnection = string;
 type role = string;
 
 export class User {
+  userId: number;
   firstName: firstName;
   lastName: lastName;
   email: email;
@@ -16,6 +17,7 @@ export class User {
   role: role;
 
   constructor(
+    userId: number = 0,
     firstName: firstName = "Pepe",
     lastName: lastName = "Pecas",
     email: email = "pepe@gmail.com",
@@ -24,6 +26,7 @@ export class User {
     lastConnection: lastConnection = "2021-02-24",
     role: role= "user"
   ) {
+    this.userId = userId;
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
@@ -31,5 +34,27 @@ export class User {
     this.birthDate = birthDate;
     this.lastConnection = lastConnection;
     this.role = role;
+  }
+}
+
+export class Photo {
+  photoId: number;
+  title: string;
+  thumbnail: string;
+  alt: string;
+  cloudinaryPublicId: string;
+
+  constructor(
+    PhotoId: number,
+    title: string,
+    thumbnail: string,
+    alt: string,
+    cloudinaryPublicId: string
+  ) {
+    this.photoId = PhotoId;
+    this.title = title;
+    this.thumbnail = thumbnail;
+    this.alt = alt;
+    this.cloudinaryPublicId = cloudinaryPublicId;
   }
 }

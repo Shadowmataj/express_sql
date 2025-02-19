@@ -5,6 +5,7 @@ import multer from "multer";
 import config from "../config.ts";
 import PhotosManager from "../controller/photos.manager.ts";
 import { cloudinaryDestroy, cloudinaryUpload } from "../services/uploader.ts";
+import { Photo } from "../types.ts";
 
 const photoRouter = Router();
 const pm = new PhotosManager();
@@ -29,8 +30,8 @@ photoRouter.get("/", async (req: Request, res: Response) => {
 photoRouter.get("/:pid", async (req: Request, res: Response) => {
   const pid = +req.params.pid;
   try {
-    const [[result]]: any[] = await pm.getPhoto(pid);
-    if (result.length === 0) throw new Error("The photo's id is not correct.");
+    const result: Photo | undefined = await pm.getPhoto(pid);
+    if (result === undefined) throw new Error("The photo's id is not correct.");
 
     req.logger.info(`${moment().format()} ${req.method} api/photos${req.url}`);
     res.status(200).send({ status: "success", payload: result });
@@ -60,7 +61,7 @@ photoRouter.post(
             response = uploadedInfo.secure_url;
         }
         const thumbnail = !response ? req.file.path : response;
-        const [[result]] = await pm.createPhoto(title, thumbnail, alt, cloudinaryPublicId);
+        const result = await pm.createPhoto(title, thumbnail, alt, cloudinaryPublicId);
 
         req.logger.info(`${moment().format()} ${req.method} api/photos${req.url}`)
         res.status(200).send({ status: "success", payload: result });
@@ -78,17 +79,18 @@ photoRouter.put("/", async (req: Request, res: Response) => {
 });
 
 //Endpoint to delete a single photo.
-photoRouter.delete("/:pid", async (req: Request, res: Response) => {
-  const pid = +req.params.pid;
+photoRouter.delete("/:uid", async (req: Request, res: Response) => {
+  const uid = +req.params.uid;
     try {
-        const result: any = await pm.deletePhotos(pid);
-        await cloudinaryDestroy(result);
+        const result: string | undefined = await pm.deletePhotos(uid);
+        
         if (result === undefined)
             throw new Error("The oparation can not be done, the id is incorrect.");
+        await cloudinaryDestroy(result);
         req.logger.info(`${moment().format()} ${req.method} api/photos${req.url}`);
         res.status(200).send({
             status: "success",
-            payload: `The photo "${result.italics()}" has been deleted.`,
+            payload: `The photo "${result}" has been deleted.`,
         });
     }
     catch (err:any) {

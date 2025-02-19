@@ -5,8 +5,7 @@ import jwt from "jsonwebtoken"
 
 import config from '../config.ts';
 import { NextFunction, Request, Response } from 'express';
-
-interface User  {firstName: string, email: string}
+import { User } from '../types.ts';
 
 const dUri = new DatauriParser();
 
@@ -17,9 +16,9 @@ export const dataUri = (originalname: string, buffer: Buffer) => {
 
 export const createHash = (password: string): string => bcrypt.hashSync(password, bcrypt.genSaltSync(10))
 
-export const isValidPassword = (user:  {password: string }, password: string): boolean => bcrypt.compareSync(password, user.password)
+export const isValidPassword = (user: User, password: string): boolean => bcrypt.compareSync(password, user.password)
 
-export const createToken = (payload: User, duration: any) => jwt.sign(payload, config.SECRET, { expiresIn: duration })
+export const createToken = (payload: Partial<User>, duration: any) => jwt.sign(payload, config.SECRET, { expiresIn: duration })
 
 export const verifyToken = (req: Request, res: Response, next: NextFunction) => {
         // Header Authorization: Bearer <token>

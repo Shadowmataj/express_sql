@@ -1,20 +1,20 @@
 import { Request, Response, Router } from "express";
 import moment from "moment";
 
-import usersManager from "../controller/users.manager.ts";
+import UsersManager from "../controller/users.manager.ts";
 import { User } from "../types.ts";
 
 const usersRouter = Router();
-const um = new usersManager();
+const um = new UsersManager();
 // interface CustomRequest<T> extends Request {
 //   body: T
 // }
 //Endpoint to get a user by the email.
-usersRouter.get("/email", async (req: Request<unknown, unknown, { email: string}, unknown>, res: Response) => {
-  const email: string = req.body.email;
+usersRouter.get("/email", async (req: Request, res: Response) => {
+  const { email } = req.body;
   try {
     const result: User|undefined = await um.getUserByEmail(email);
-    if (!result) throw new Error("The photo's id is not correct.");
+    if (!result) throw new Error("The user's email is not correct.");
 
     req.logger.info(`${moment().format()} ${req.method} api/users${req.url}`)
     res.status(200).send({ status: "success", payload: result });
@@ -43,8 +43,8 @@ usersRouter.get("/", async (req: Request, res: Response) => {
 usersRouter.get("/:uid", async (req: Request, res: Response) => {
   const uid: number = +req.params.uid;
   try {
-    const result: User|undefined = await um.getUserById(uid);
-    if (!result) throw new Error("The photo's id is not correct.");
+    const result: Partial<User>|undefined = await um.getUserById(uid);
+    if (!result) throw new Error("The user's id is not correct.");
 
     req.logger.info(`${moment().format()} ${req.method} api/users${req.url}`)
     res.status(200).send({ status: "success", payload: result });
@@ -55,18 +55,17 @@ usersRouter.get("/:uid", async (req: Request, res: Response) => {
 });
 
 
-//Endpoint to delete a single photo.
+//Endpoint to delete a single user.
 usersRouter.delete("/:uid", async (req: Request, res: Response) => {
   const uid: number = +req.params.uid;
   try {
-    const result: string | undefined = await um.deleteUsers(uid);
-
+    const result: any = await um.deleteUsers(uid);
     if (result === undefined) throw new Error("The oparation can not be done, the id is incorrect.");
 
     req.logger.info(`${moment().format()} ${req.method} api/users${req.url}`)
     res.status(200).send({
         status: "success",
-        payload: `The photo "${result}" has been deleted.`,
+        payload: `The user "${result}" has been deleted.`,
       });
   } catch (err: any) {
     req.logger.error(`${moment().format()} ${req.method} api/users${req.url} ${err}`)

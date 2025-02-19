@@ -2,7 +2,7 @@ import UsersServices from '../services/users.dao.sqldb.ts'
 
 const us = new UsersServices()
 
-class usersManager{
+class UsersManager{
 
     async getUsers(){
         try{
@@ -48,4 +48,4 @@ class usersManager{
 
 }
 
-export default usersManager
+export default UsersManager
