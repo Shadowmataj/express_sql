@@ -31,6 +31,15 @@ class PhotosManager{
         }
     }
 
+    async updatePhoto(photoId: number, title: string, photoText: string, alt: string){
+        try{
+            const result = ps.updatePhotoService(photoId, title, photoText, alt)
+            return result
+        }catch(err){
+            console.log(`Function createPhoto: ${err}`)
+        }
+    }
+
     async deletePhotos(pid: number){
         try{
             const result = ps.deletePhotosService(pid)

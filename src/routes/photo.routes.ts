@@ -14,9 +14,9 @@ const uploader = multer();
 //Endpoint to retrieve all the photos.
 photoRouter.get("/", async (req: Request, res: Response) => {
   try {
-    const result = await pm.getPhotos();
-
-    req.logger.info(`${moment().format()} ${req.method} api/photos${req.url}`);
+    const result: Photo[] | undefined = await pm.getPhotos();
+    if(!result) throw new Error("There was a problem on the db connection.")
+    
     res.status(200).send({ status: "success", payload: result });
   } catch (err: any) {
     req.logger.error(
@@ -28,12 +28,11 @@ photoRouter.get("/", async (req: Request, res: Response) => {
 
 //Endpoint to retrieve a single photo.
 photoRouter.get("/:pid", async (req: Request, res: Response) => {
-  const pid = +req.params.pid;
+  const pid: number = +req.params.pid;
   try {
     const result: Photo | undefined = await pm.getPhoto(pid);
     if (result === undefined) throw new Error("The photo's id is not correct.");
 
-    req.logger.info(`${moment().format()} ${req.method} api/photos${req.url}`);
     res.status(200).send({ status: "success", payload: result });
   } catch (err: any) {
     req.logger.error(
@@ -61,9 +60,8 @@ photoRouter.post(
             response = uploadedInfo.secure_url;
         }
         const thumbnail = !response ? req.file.path : response;
-        const result = await pm.createPhoto(title, thumbnail, alt, cloudinaryPublicId);
+        const result: Photo | undefined = await pm.createPhoto(title, thumbnail, alt, cloudinaryPublicId);
 
-        req.logger.info(`${moment().format()} ${req.method} api/photos${req.url}`)
         res.status(200).send({ status: "success", payload: result });
     } catch (err: any) {
         req.logger.error(`${moment().format()} ${req.method} api/photos${req.url} ${err}`)
@@ -74,20 +72,29 @@ photoRouter.post(
 
 //Endpoint to edit a photo.
 photoRouter.put("/", async (req: Request, res: Response) => {
-  req.logger.info(`${moment().format()} ${req.method} api/photos${req.url}`);
-  res.status(200).send({ status: "success", payload: "photos" });
+  const photoId = +req.body.photoId
+  const {title, photoText, alt} = req.body
+  try{
+    
+    const result = await pm.updatePhoto(photoId, title, photoText, alt)
+    if(!result) throw new Error("The photo's id is not correct.")
+
+    res.status(200).send({ status: "success", payload: result });
+  }catch(err: any){
+    req.logger.error(`${moment().format()} ${req.method} api/photos${req.url} ${err}`)
+        res.status(400).send({ status: "error", payload: err.message });
+  }
 });
 
 //Endpoint to delete a single photo.
 photoRouter.delete("/:uid", async (req: Request, res: Response) => {
-  const uid = +req.params.uid;
+  const uid: number = +req.params.uid;
     try {
         const result: string | undefined = await pm.deletePhotos(uid);
         
-        if (result === undefined)
-            throw new Error("The oparation can not be done, the id is incorrect.");
+        if (result === undefined) throw new Error("The oparation can not be done, the id is incorrect.");
         await cloudinaryDestroy(result);
-        req.logger.info(`${moment().format()} ${req.method} api/photos${req.url}`);
+      
         res.status(200).send({
             status: "success",
             payload: `The photo "${result}" has been deleted.`,

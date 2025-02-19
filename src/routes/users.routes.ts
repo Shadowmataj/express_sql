@@ -20,7 +20,6 @@ usersRouter.get("/email", async (req: Request, res: Response) => {
     res.status(200).send({ status: "success", payload: result });
   } catch (err: any) {
     console.log(err.message)
-    req.logger.error(`${moment().format()} ${req.method} api/users${req.url} ${err}`)
     res.status(400).send({ status: "error", payload: err.message });
   }
 });
@@ -31,7 +30,6 @@ usersRouter.get("/", async (req: Request, res: Response) => {
   try {
     const result = await um.getUsers();
 
-    req.logger.info(`${moment().format()} ${req.method} api/users${req.url}`)
     res.status(200).send({ status: "success", payload: result });
   } catch (err: any) {
     req.logger.error(`${moment().format()} ${req.method} api/users${req.url} ${err}`)
@@ -46,7 +44,6 @@ usersRouter.get("/:uid", async (req: Request, res: Response) => {
     const result: Partial<User>|undefined = await um.getUserById(uid);
     if (!result) throw new Error("The user's id is not correct.");
 
-    req.logger.info(`${moment().format()} ${req.method} api/users${req.url}`)
     res.status(200).send({ status: "success", payload: result });
   } catch (err: any) {
     req.logger.error(`${moment().format()} ${req.method} api/users${req.url} ${err}`)
@@ -62,7 +59,6 @@ usersRouter.delete("/:uid", async (req: Request, res: Response) => {
     const result: any = await um.deleteUsers(uid);
     if (result === undefined) throw new Error("The oparation can not be done, the id is incorrect.");
 
-    req.logger.info(`${moment().format()} ${req.method} api/users${req.url}`)
     res.status(200).send({
         status: "success",
         payload: `The user "${result}" has been deleted.`,

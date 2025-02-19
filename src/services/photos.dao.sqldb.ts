@@ -26,6 +26,13 @@ class PhotosServices{
         return await this.getPhotoService(pid)
     }
 
+    async updatePhotoService(photoId: number, title: string, photoText:string, alt: string): Promise<Photo|undefined>{
+        await pool.query(`
+            CALL p_update_photo(?, ?, ?, ?)`, [photoId, title, photoText, alt]
+        )
+        return await this.getPhotoService(photoId)
+    }
+
     async deletePhotosService(pid: number): Promise<string|undefined>{
         const photo: Photo = await this.getPhotoService(pid)
         await pool.query(`

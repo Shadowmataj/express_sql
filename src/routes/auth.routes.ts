@@ -18,7 +18,6 @@ authRouter.post("/register", async (req: Request, res: Response) => {
 
         const result = await um.createUser(firstName, lastName, email, birthday, hashedPassword);
 
-        req.logger.info(`${moment().format()} ${req.method} api/auth${req.url}`)
         res.status(200).send({ status: "success", payload: result });
     } catch (err: any) {
         req.logger.info(`${moment().format()} ${req.method} api/auth${req.url} ${err}`)
@@ -35,7 +34,7 @@ authRouter.post("/jwtlogin", async (req: Request, res: Response) => {
         
         const {password, ...filteredUser } = user
         const token = createToken(filteredUser, "60s");
-        req.logger.info(`${moment().format()} ${req.method} auth${req.url}`)
+        
         res.status(200).cookie("photoAppToken", token, {
             httpOnly: true,
             secure: process.env.MODE === "prod",
